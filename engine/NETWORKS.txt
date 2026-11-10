@@ -1,0 +1,4 @@
+请从 https://github.com/official-pikafish/Pikafish/releases/tag/Pikafish-2026-09-06
+下载 Pikafish.2026-09-06.7z，解出配套的 pikafish.nnue。校验值见 manifest.json。
+该权重适用 https://github.com/official-pikafish/Networks#nnue-license 的独立条款，未经许可不得商用。
+本仓库和公开安装包均不分发该权重。

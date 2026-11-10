@@ -1,0 +1,23 @@
+{
+  "engine": "Pikafish",
+  "source": "https://github.com/official-pikafish/Pikafish",
+  "commit": "4c17cee11f888ae1d48a9494f2e2239f019f0a1f",
+  "upstream_release": "Pikafish-2026-09-06",
+  "build": "make -C src -j 3 build ARCH=x86-64-avx2 COMP=clang",
+  "target": "Intel macOS x86_64 AVX2",
+  "network": {
+    "download": "https://github.com/official-pikafish/Pikafish/releases/download/Pikafish-2026-09-06/Pikafish.2026-09-06.7z",
+    "archive_sha256": "41952bbfe2520faceb5902c69e6ab4845cc999841d2b49a95cc1be7867a25e5b",
+    "file": "pikafish.nnue",
+    "file_sha256": "7d13d73569a9b571ba0eb20cf1596247bc2a42738967e61afef6482b231e900e",
+    "license": "https://github.com/official-pikafish/Networks#nnue-license",
+    "included": false
+  },
+  "sha256": {
+    "pikafish": "893b0e9464deef57fba473249695fea9ee29748bfc5b8d87e8ca5c6cf84ea106",
+    "pikafish-source.tar.gz": "4d905f5bb9d96632900aa88505d816e2d5997919e1375077a591cfeb0e6c7a10",
+    "Copying.txt": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "AUTHORS": "0358f129f8f5c604c032916b8c315fec5bc3151ebdae51456b4fad27895abfbe",
+    "NETWORKS.txt": "a0df2c7aaab044fb5e618a6d364b75575fc6c09c196178e00af58aeffabff68c"
+  }
+}
