@@ -67,7 +67,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, WKNa
 
     @objc private func about() {
         NSApp.orderFrontStandardAboutPanel(options: [
-            .applicationName: "中国象棋助手", .applicationVersion: "1.1",
+            .applicationName: "中国象棋助手", .applicationVersion: "1.2.0",
             .credits: NSAttributedString(string: "中国象棋 USB 屏幕识别与 Pikafish 下一步建议\nPikafish：GPL-3.0\n许可及源代码随 App 资源附带。")
         ])
     }

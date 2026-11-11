@@ -10,7 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 APP_NAME = "中国象棋助手.app"
-INSTALL_TEXT = """中国象棋助手 1.1
+INSTALL_TEXT = """中国象棋助手 {version}
 
 安装：
 1. 将“中国象棋助手.app”拖到旁边的“Applications”文件夹。
@@ -31,7 +31,7 @@ iPhone 通过 USB 连接 Mac，保持解锁并显示完整象棋开局。
 点击“重置棋局”可清空本局记录并重新读取，原有自动识别继续保留。
 计算时间可选 250 毫秒至 30 秒，计算中持续更新建议，完成后显示最终建议。
 
-兼容：Intel Mac（AVX2），macOS 14 或更新版本。
+兼容：{platform}，macOS 14 或更新版本。
 Python、OpenCV 和 Pikafish 引擎已内置。
 本版使用本机 ad-hoc 签名，未进行 Apple 公证。
 完整说明、第三方许可及对应源码随 App 资源附带。
@@ -64,7 +64,8 @@ def main():
         stage.mkdir()
         run("/usr/bin/ditto", app, stage / APP_NAME)
         (stage / "Applications").symlink_to("/Applications", target_is_directory=True)
-        (stage / "安装说明.txt").write_text(INSTALL_TEXT, encoding="utf-8")
+        platform = "Apple 芯片 Mac" if info.get("AssistantArchitecture") == "arm64" else "Intel Mac（AVX2）"
+        (stage / "安装说明.txt").write_text(INSTALL_TEXT.format(version=info["CFBundleShortVersionString"], platform=platform), encoding="utf-8")
         run("/usr/bin/codesign", "--verify", "--deep", "--strict", stage / APP_NAME)
         image = folder / "installer.dmg"
         run("/usr/bin/hdiutil", "create", "-srcfolder", stage, "-fs", "HFS+",

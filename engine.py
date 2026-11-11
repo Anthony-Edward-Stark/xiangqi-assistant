@@ -32,7 +32,8 @@ class Engine:
         self.closed = False
         self.threads = threads or physical_threads()
         self.hash_mb = hash_mb
-        self.network = Path(network) if network is not None else ROOT/"engine/pikafish.nnue"
+        self.directory = Path(os.environ.get("ASSISTANT_ENGINE_DIR") or ROOT / "engine").resolve()
+        self.network = Path(network) if network is not None else self.directory / "pikafish.nnue"
         self.cancel_event = None
         self.reset_requested = threading.Event()
         self.game_fen = None
@@ -62,15 +63,17 @@ class Engine:
             raise RuntimeError("引擎已关闭")
         if self.process and self.process.poll() is None:
             return
-        network=self.network if self.network.is_file() else ROOT/"engine/pikafish.nnue"
+        network=self.network if self.network.is_file() else self.directory / "pikafish.nnue"
         if not network.is_file():
             raise FileNotFoundError(f"请将 {NETWORK_GUIDE} 放入 {self.network.parent.resolve()} 后重启助手。")
         network=network.resolve()
         if "\n" in str(network) or "\r" in str(network):
             raise ValueError("权重文件路径不能含换行符")
         self.lines = queue.Queue()
-        self.process = subprocess.Popen([str(ROOT/"engine/pikafish")],cwd=ROOT/"engine",
-            stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,bufsize=1)
+        executable = "pikafish.exe" if os.name == "nt" else "pikafish"
+        self.process = subprocess.Popen([str(self.directory / executable)],cwd=network.parent,
+            stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True,
+            encoding="utf-8",errors="replace",bufsize=1,creationflags=getattr(subprocess,"CREATE_NO_WINDOW",0))
         process,lines = self.process,self.lines
         def reader():
             for line in process.stdout:
@@ -83,7 +86,7 @@ class Engine:
         self.game_moves=()
         for command in (f"setoption name Threads value {self.threads}",f"setoption name Hash value {self.hash_mb}",
                         "setoption name MultiPV value 1","setoption name Ponder value false",
-                        f"setoption name EvalFile value {network}","isready"):
+                        f"setoption name EvalFile value {network.name}","isready"):
             self._write(command)
         self._read_until(lambda line: line == "readyok",15)
 
